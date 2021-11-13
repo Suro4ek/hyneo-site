@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React from 'react';
 import ToastProvider from "./components/Toast/ToastProvider";
-import {ApolloClient, ApolloProvider, createHttpLink, gql, InMemoryCache} from "@apollo/client";
+import {ApolloClient, ApolloProvider, createHttpLink, InMemoryCache} from "@apollo/client";
 
 import {cartItems, darkTheme} from "./cache/cache";
 import Pages from "./pages";
 
-const uri = "http://localhost:4000/api";
+const uri = process.env.REACT_APP_API_URL;
 const httpLink = createHttpLink({uri});
 
 const cache = new InMemoryCache({

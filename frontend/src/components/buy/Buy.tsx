@@ -19,7 +19,6 @@ const Buy = () => {
     }
 
     const [buy1] = useMutation(BUY, {onCompleted: data => {
-            console.log(data.buy);
             const s:String = data.buy;
             if(s.startsWith("https://oplata.qiwi.com")){
                 window.location.href = data.buy;
@@ -106,7 +105,7 @@ const Buy = () => {
 
                             <div className="w-full gap-y-8 gap-x-6 items-start sm:grid-cols-12 lg:gap-x-8">
                                 <div className="sm:col-span-8 lg:col-span-7">
-                                    <h2 className="text-2xl font-extrabold text-gray-900 sm:pr-12">{item?.name}</h2>
+                                    <h2 className="text-2xl font-extrabold text-gray-900 sm:pr-12">Форма оплаты</h2>
                                     <section aria-labelledby="options-heading" className="mt-10">
                                         <form onSubmit={(e) => {
                                             e.preventDefault();

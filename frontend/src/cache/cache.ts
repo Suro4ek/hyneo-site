@@ -1,5 +1,5 @@
 import {makeVar, ReactiveVar} from "@apollo/client";
-import {Buy, CartNode, Item} from "../api/API"
+import {Banner, Buy, CartNode, Item} from "../api/API"
 let def = {total_price: 0, Cart: []}
 
 if( localStorage.getItem("cart") !== null) {
@@ -18,3 +18,4 @@ export const current_product: ReactiveVar<Item | null> = makeVar<Item | null>(nu
 export const open_cardinfo: ReactiveVar<boolean> = makeVar<boolean>(false);
 export const open_buy: ReactiveVar<boolean> = makeVar<boolean>(false);
 export const buy: ReactiveVar<Buy> = makeVar<Buy>({pay: 0, Cart: [], nickname: "", promo: ""});
+export const banner: ReactiveVar<Banner> = makeVar<Banner>({show: false, message:""});

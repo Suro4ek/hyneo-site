@@ -3,6 +3,8 @@ import {Category} from "../entity/Category";
 import {Item} from "../entity/Item";
 import {Promocode} from "../entity/Promocode";
 import {P2P} from "qiwi-sdk";
+import {Pay, Process_Pay} from "../entity/Pay";
+
 const crypto = require("crypto");
 const path = require('path')
 
@@ -43,12 +45,17 @@ module.exports = {
     },
     buy: async (parent: any, args: any) => {
         const repository_promo = getRepository(Promocode);
+        const repository_pay = getRepository(Pay);
+        const payment = new Pay();
+        payment.created_at=new Date();
+        payment.updated_at=new Date();
         const repository = getRepository(Item);
         let discount = 0;
         const buy = args.buy;
         const promocode = await repository_promo.findOne({where: {name: buy.promo}});
         if(promocode){
             discount = promocode?.discount;
+            payment.promocode = promocode;
         }
         const carts = buy.Cart;
         const ids = [];
@@ -56,13 +63,25 @@ module.exports = {
         let desc = "";
         for(let i = 0; i < carts.length; i++){
             const item = carts[i].item[0];
-            ids.push({id: item.id, count: carts[i].count});
+            ids.push({id: item.id});
         }
         const items = await repository.findByIds(ids);
-        for(let i = 0; i < items.length; i++){
-            desc += items[0].name+" ";
-            sum += items[0].price*carts[i].count;
+        const newitems:Item[] = [];
+        for(let i = 0; i < carts.length; i++){
+            const item = carts[i].item[0];
+            items.forEach(value => {
+                if(value.id === parseInt(item.id)){
+                    desc += value.name+" ";
+                    sum += value.price;
+                    newitems.push(value);
+                }
+            })
         }
+        payment.nickname = buy.nickname;
+        payment.items=JSON.stringify(Object.assign({}, newitems));
+        // payment.items=newitems;
+        payment.process=Process_Pay.IN_PROCCESS;
+        const payment1 = await repository_pay.save(payment);
         desc += "на ник "+buy.nickname;
         if(buy.pay === 0){
             const bill =  await p2p.createBill({
@@ -77,19 +96,15 @@ module.exports = {
                 successUrl: `https://localhost:400/success`,
                 paySource: P2P.PaySource.Card
             });
-            console.log(url);
-            console.log(bill.payUrl)
             return url;
         }else if(buy.pay === 1){
             const secret_key = process.env.SECRET_KEY;
-            console.log(desc);
-            console.log(ids);
-            const merchant_id = 1;
-            const pay_id = 123123213;
-            const arr = [merchant_id, '3123213', sum, desc, secret_key];
-            const hesh = crypto.createHash("sha256");
-            const sign = hesh.update(arr.join(":")).digest('base64');
-            return `https://anypay.io/merchant?merchant_id=${merchant_id}&amount=${sum}&pay_id=${pay_id}&desc=${desc}&sign=${sign}`;
+            const pay_id = payment1.id;
+            const currency = "RUB";
+            const arr = [currency,sum, secret_key, process.env.PROJECT_ID, pay_id];
+            const hesh = crypto.createHash("md5");
+            const sign = hesh.update(arr.join(":")).digest('hex');
+            return `https://anypay.io/merchant?merchant_id=${process.env.PROJECT_ID}&amount=${sum}&currency=${currency}&pay_id=${pay_id}&desc=${desc}&sign=${sign}`;
         }else{
             new Error("sdasdasd");
         }

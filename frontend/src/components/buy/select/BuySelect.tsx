@@ -6,11 +6,11 @@ import {buy} from "../../../cache/cache";
 const plans = [
     {
         id: 0,
-        name: 'Qiwi',
+        name: 'Оплата Qiwi',
     },
     {
         id: 1,
-        name: 'AnyPay',
+        name: 'Оплата телефоном или картой',
     },
 ]
 
@@ -63,7 +63,7 @@ const BuySelect = () => {
                                     </div>
                                     {checked && (
                                         <div className="flex-shrink-0 text-black">
-                                            <BsFillCheckSquareFill  className="w-6 h-6"/>
+                                            <BsFillCheckSquareFill  className="w-5 h-5"/>
                                         </div>
                                     )}
                                 </div>

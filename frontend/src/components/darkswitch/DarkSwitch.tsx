@@ -1,4 +1,4 @@
-import {useMutation, useQuery, useReactiveVar} from "@apollo/client";
+import {useReactiveVar} from "@apollo/client";
 import {FiSun, RiMoonLine} from "react-icons/all";
 import {useToast} from "../Toast/ToastProvider";
 import {darkTheme} from "../../cache/cache";

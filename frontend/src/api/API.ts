@@ -17,6 +17,11 @@ export interface CartNode{
     Cart: Cart[]
 }
 
+export interface Banner{
+    show: boolean,
+    message: string
+}
+
 export function classNames(...classes:any) {
     return classes.filter(Boolean).join(' ')
 }

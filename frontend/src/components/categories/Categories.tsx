@@ -5,7 +5,7 @@ import React from "react";
 import {current} from "../../cache/cache";
 
 const Categories = () => {
-    const {data, loading, error, fetchMore} = useQuery(GET_CATEGORY);
+    const {data, loading, error} = useQuery(GET_CATEGORY);
     const curren = useReactiveVar(current);
 
     if(loading) return <div className="flex justify-center items-center text-gray-400">Загрузка..</div>;

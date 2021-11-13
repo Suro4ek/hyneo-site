@@ -16,4 +16,12 @@ export class Item{
 
     @Column()
     img: String;
+
+    @Column({
+        default: '0'
+    })
+    count: Number
+
+    @Column()
+    command: String
 }
