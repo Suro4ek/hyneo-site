@@ -35,8 +35,6 @@ jobs:
       # Runs a single command using the runners shell
       - name: Setup Node.js environmett
         uses: actions/setup-node@v2
-      - name: Join path react-app
-        run: cd ./frontend
       - name: Install Packages
         run: npm install
       - name: Build page
