@@ -17,7 +17,10 @@ const Card = ({item}:{item:Item}) =>{
                     </div>
                 <div className="mr-1 ml-1">
                     <h3 className="mt-4 text-sm text-gray-700 dark:text-gray-200">{item.name}</h3>
-                    <p className="mt-1 text-lg font-medium text-gray-900 dark:text-gray-200">{item.price}</p>
+                    <div className="flex space-x-2">
+                        <p className="mt-1 text-lg font-medium text-gray-900 dark:text-gray-400 line-through">{item.discprice}р</p>
+                        <p className="mt-1 text-lg font-medium text-gray-900 dark:text-gray-200">{item.price}р</p>
+                    </div>
                     <div className="w-full mb-2 flex">
                         <button value="button"
                                 className="bg-gray-700 text-base text-white px-4 py-2 rounded hover:bg-gray-900 mt-8 dark:hover:bg-gray-800"

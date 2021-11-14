@@ -12,6 +12,7 @@ const GET_CATEGORY = gql`
                 price
                 desc
                 img
+                discprice
             }
         }
     }

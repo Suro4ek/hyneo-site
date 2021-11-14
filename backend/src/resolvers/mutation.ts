@@ -78,8 +78,7 @@ module.exports = {
             })
         }
         payment.nickname = buy.nickname;
-        payment.items=JSON.stringify(Object.assign({}, newitems));
-        // payment.items=newitems;
+        payment.items=JSON.stringify(newitems);
         payment.process=Process_Pay.IN_PROCCESS;
         const payment1 = await repository_pay.save(payment);
         desc += "на ник "+buy.nickname;
@@ -91,9 +90,9 @@ module.exports = {
                 },
                 expirationDateTime: P2P.formatLifetime(2 /* 2 дня */),
                 comment: desc
-            });
+            }, payment.id+"");
             const url = P2P.patchPayUrl(bill.payUrl, {
-                successUrl: `https://localhost:400/success`,
+                successUrl: `https://devasdasdasd.hyneo.ru/success`,
                 paySource: P2P.PaySource.Card
             });
             return url;

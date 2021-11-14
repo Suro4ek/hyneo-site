@@ -20,7 +20,8 @@ const Cards = () => {
                 name: string,
                 price: number,
                 desc: string,
-                img: string
+                img: string,
+                discprice: number
             }) => (
                 <Card key={value.id} item={value}/>
             ))}

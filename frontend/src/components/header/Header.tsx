@@ -6,12 +6,16 @@ import {classNames} from "../../api/API";
 import Copy from "../Online/Copy";
 import {Link} from "react-router-dom";
 import {useState} from "react";
+import {buy, cartItems} from "../../cache/cache";
+import {useReactiveVar} from "@apollo/client";
 
 const Header = ({setOpen}:any) => {
+    const carts1 = useReactiveVar(cartItems);
     const [navigation, setNavigation] = useState([
         { name: 'Донат', to: '/', current: true },
-        { name: 'Банлист', to: '/banlist', current: false },
-        { name: 'О проекте', to: '/about', current: false },
+        { name: 'Банлист', to: 'https://ban.hyneo.ru/', current: false },
+        { name: 'Wiki', to: 'https://wiki.hyneo.ru/', current: false },
+        { name: 'Правила', to: 'https://wiki.hyneo.ru/p/1', current: false },
     ]);
     return (
         <Disclosure as="nav" className="bg-gray-800">
@@ -22,7 +26,7 @@ const Header = ({setOpen}:any) => {
                             <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                                 {/* Mobile menu button*/}
                                 <Disclosure.Button className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                                    <span className="sr-only">Open main menu</span>
+                                    <span className="sr-only">Открыть главное меню</span>
                                     {open ? (
                                         <AiOutlineClose/>
                                     ) : (
@@ -37,9 +41,9 @@ const Header = ({setOpen}:any) => {
                                 <div className="hidden sm:block sm:ml-6">
                                     <div className="flex space-x-4">
                                         {navigation.map((item, value) => (
-                                            <Link
+                                            <a
                                                 key={value}
-                                                to={item.to}
+                                                href={item.to}
                                                 className={classNames(
                                                     item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                                                     'px-3 py-2 rounded-md text-sm font-medium'
@@ -60,7 +64,7 @@ const Header = ({setOpen}:any) => {
                                                 aria-current={item.current ? 'page' : undefined}
                                             >
                                                 {item.name}
-                                            </Link>
+                                            </a>
                                         ))}
                                     </div>
                                 </div>
@@ -73,7 +77,10 @@ const Header = ({setOpen}:any) => {
                                     onClick={() => setOpen(true)}
                                 >
                                     <span className="sr-only" >Корзина</span>
-                                    <BiCartAlt className="block h-7 w-7"/>
+                                    <div className="relative h-7 w-7">
+                                        <BiCartAlt className="h-7 w-7"/>
+                                        <div className="absolute block -top-2 px-1 py-0.5 -right-2 bg-yellow-300 text-black rounded-3xl text-xs">{carts1.Cart.length}</div>
+                                    </div>
                                 </button>
 
                                 <DarkSwitch/>
@@ -85,9 +92,9 @@ const Header = ({setOpen}:any) => {
                     <Disclosure.Panel className="sm:hidden">
                         <div className="px-2 pt-2 pb-3 space-y-1">
                             {navigation.map((item, value) => (
-                                <Link
+                                <a
                                       key={value}
-                                      to={item.to}
+                                      href={item.to}
                                       onClick={()=> {
                                           setNavigation(navigation.map(value1 => {
                                               if(value1.current){
@@ -106,7 +113,7 @@ const Header = ({setOpen}:any) => {
                                           'block px-3 py-2 rounded-md text-base font-medium'
                                       )}
                                       aria-current={item.current ? 'page' : undefined}
-                                > {item.name}</Link>
+                                > {item.name}</a>
                             ))}
                         </div>
                     </Disclosure.Panel>

@@ -7,6 +7,7 @@ module.exports = gql`
         price: Int!
         desc: String!
         img: String
+        discprice: Int!
     }
 
     type Category{
@@ -54,6 +55,7 @@ module.exports = gql`
         price: Int!
         desc: String!
         img: String
+        discprice: Int!
     }
     
     input CartInput{

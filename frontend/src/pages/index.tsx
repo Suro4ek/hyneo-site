@@ -5,6 +5,9 @@ import Header from "../components/header/Header";
 import Banner from "../components/Banner/Banner";
 import React, {useState} from "react";
 import Cart from "../components/cart/Cart";
+import Footer from "../components/footer/Footer";
+import Offer from "./Offer";
+import Privacy from "./privacy";
 
 const Pages = () => {
 
@@ -20,9 +23,12 @@ const Pages = () => {
             <Banner/>
             <Routes>
                 <Route path={"/"} element={<Shop/>}/>
+                <Route path="/offer" element={<Offer/>}/>'
+                <Route path="/privacy" element={<Privacy/>}/>
                 <Route path="*" element={<Page404/>}/>
             </Routes>
             <Cart open={open} setOpen={setOpens}/>
+            <Footer/>
         </Router>
     )
 }

@@ -12,6 +12,9 @@ export class Item{
     price: number;
 
     @Column()
+    discprice: number;
+
+    @Column()
     desc: String;
 
     @Column()

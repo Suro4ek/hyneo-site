@@ -3,6 +3,7 @@ import CardInfo from "../CardInfo/CardInfo";
 import Buy from "../buy/Buy";
 import Cards from "./Cards";
 
+
 const Shop = () => {
     return(
         <div>

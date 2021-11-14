@@ -3,7 +3,8 @@ export interface Item{
     name: string,
     price: number,
     desc: string,
-    img: string
+    img: string,
+    discprice: number
 }
 
 export interface Cart{
