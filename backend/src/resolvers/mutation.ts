@@ -4,13 +4,20 @@ import {Item} from "../entity/Item";
 import {Promocode} from "../entity/Promocode";
 import {P2P} from "qiwi-sdk";
 import {Pay, Process_Pay} from "../entity/Pay";
-
+import {AuthenticationError, ForbiddenError} from "apollo-server-express";
+import {User} from "../entity/User";
 const crypto = require("crypto");
-const path = require('path')
+const path = require('path');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const p2p = new P2P(process.env.QIWI_SECRET_KEY!, process.env.QIWI_PUBLIC_KEY!);
+
 module.exports = {
-    newCategories: async (parent:any, args:any) => {
+    newCategories: async (parent:any, args:any, {user}:any) => {
+        if (!user) {
+            throw new AuthenticationError('You must be signed');
+        }
         const category_repository = getRepository(Category);
         const category = new Category();
         category.name = args.name;
@@ -18,7 +25,10 @@ module.exports = {
         category.items = new Array<Item>();
         return await category_repository.save(category);
     },
-    newItem: async (parent:any, args:any) => {
+    newItem: async (parent:any, args:any, {user}:any) => {
+        if (!user) {
+            throw new AuthenticationError('You must be signed');
+        }
         const repository = getRepository(Item);
         const item = new Item();
         item.name = args.name;
@@ -29,7 +39,10 @@ module.exports = {
         item.img = args.img ? args.img : "";
         return await repository.save(item);
     },
-    newPromo: async (parent:any, args:any) => {
+    newPromo: async (parent:any, args:any, {user}:any) => {
+        if (!user) {
+            throw new AuthenticationError('You must be signed');
+        }
       const repository = getRepository(Promocode)
       const promocode = new Promocode();
       promocode.name = args.name;
@@ -107,18 +120,40 @@ module.exports = {
             const sign = hesh.update(arr.join(":")).digest('hex');
             return `https://anypay.io/merchant?merchant_id=${process.env.PROJECT_ID}&amount=${sum}&currency=${currency}&pay_id=${pay_id}&desc=${desc}&sign=${sign}`;
         }else{
-            new Error("sdasdasd");
+            new ForbiddenError("sdasdasd");
         }
     },
-    addItemToCategory: async (parent:any, {category_id, item_id}:any) => {
+    addItemToCategory: async (parent:any, {category_id, item_id}:any, {user}:any) => {
+        if (!user) {
+            throw new AuthenticationError('You must be signed');
+        }
         const category_repository = getRepository(Category);
         const item_repository = getRepository(Item);
         const category = await category_repository.findOne({where: {id: category_id}, relations: ["items"]});
         const item = await item_repository.findOne({where: { id: item_id} });
         if(!category || !item){
-            return new Error("No category/Item");
+            return new ForbiddenError("No category/Item");
         }
         category.items.push(item);
         return await category_repository.save(category);
+    },
+
+    signIn: async (parent:any, { username, password }:any ) => {
+        const repository = getRepository(User);
+        const user = await repository.findOne({where: {username:{username}}});
+
+        // if no user is found, throw an authentication error
+        if (!user) {
+            throw new AuthenticationError('Error signing in');
+        }
+
+        // if the passwords don't match, throw an authentication error
+        const valid = await bcrypt.compare(password, user.password);
+        if (!valid) {
+            throw new AuthenticationError('Error signing in');
+        }
+
+        // create and return the json web token
+        return jwt.sign({ id: user.id }, process.env.JWT_SECRET);
     }
 }
