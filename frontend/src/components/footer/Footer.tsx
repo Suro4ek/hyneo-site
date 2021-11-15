@@ -22,19 +22,14 @@ const Footer = () => {
                                             </Link>
                                         </li>
                                         <li className="mt-6">
-                                            <Link to="javascript:void(0)">
+                                            <a href="https://stats.uptimerobot.com/GXZ0nhJx46">
                                                 <a className="text-xs lg:text-sm leading-none hover:text-brand dark:hover:text-brand text-gray-800 dark:text-gray-50">Статус серверов</a>
-                                            </Link>
+                                            </a>
                                         </li>
                                         <li className="mt-6">
                                             <Link to="javascript:void(0)">
                                                 <a className="text-xs lg:text-sm leading-none hover:text-brand dark:hover:text-brand text-gray-800 dark:text-gray-50">Помощь</a>
                                             </Link>
-                                        </li>
-                                        <li className="mt-6">
-                                            <a href="javascript:void(0)" className="text-xs lg:text-sm leading-none hover:text-brand dark:hover:text-brand text-gray-800 dark:text-gray-50">
-                                                Орел петух
-                                            </a>
                                         </li>
                                     </ul>
                                 </div>
@@ -51,15 +46,11 @@ const Footer = () => {
                                 <div className="w-full lg:w-1/2 px-6">
                                     <ul>
                                         <li>
-                                            <a href="javascript:void(0)" className="text-xs lg:text-sm leading-none hover:text-brand dark:hover:text-brand text-gray-800 dark:text-gray-50">
-                                                Орел1
+                                            <a href="https://stats.uptimerobot.com/GXZ0nhJx46" className="text-xs lg:text-sm leading-none hover:text-brand dark:hover:text-brand text-gray-800 dark:text-gray-50">
+                                               Что то будет
                                             </a>
                                         </li>
-                                        <li className="mt-6">
-                                            <Link to="javascript:void(0)">
-                                                <a className="text-xs lg:text-sm leading-none hover:text-brand dark:hover:text-brand text-gray-800 dark:text-gray-50">Орел12</a>
-                                            </Link>
-                                        </li>
+
                                     </ul>
                                 </div>
                                 <div className="w-full lg:w-1/2 px-6 flex flex-col justify-between">

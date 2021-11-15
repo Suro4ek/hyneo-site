@@ -23,7 +23,9 @@ module.exports = {
         const item = new Item();
         item.name = args.name;
         item.price = args.price;
+        item.discprice = args.discprice;
         item.desc = args.desc;
+        item.command = args.command ? args.commands : "";
         item.img = args.img ? args.img : "";
         return await repository.save(item);
     },
