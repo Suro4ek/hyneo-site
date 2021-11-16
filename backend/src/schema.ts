@@ -78,5 +78,6 @@ module.exports = gql`
         checkPromo(name: String!): PromoCode
         buy(buy: BuyInput!): String!
         addItemToCategory(category_id: ID! item_id: ID!): Category
+        signIn(username: String! password: String!): String!
     }
 `;
