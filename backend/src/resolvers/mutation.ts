@@ -53,10 +53,6 @@ module.exports = {
         let discount = 0;
         const buy = args.buy;
         const promocode = await repository_promo.findOne({where: {name: buy.promo}});
-        if(promocode){
-            discount = promocode?.discount;
-            payment.promocode = promocode;
-        }
         const carts = buy.Cart;
         const ids = [];
         let sum = 0;
@@ -76,6 +72,13 @@ module.exports = {
                     newitems.push(value);
                 }
             })
+        }
+        if(promocode){
+            discount = promocode?.discount;
+            if(promocode.count != -1)
+                await repository_promo.update({id: promocode.id},{ count: promocode.count - 1});
+            payment.promocode = promocode;
+            sum -= (Math.round((sum*discount)/100));
         }
         payment.nickname = buy.nickname;
         payment.items=JSON.stringify(newitems);
