@@ -12,10 +12,10 @@ import {useReactiveVar} from "@apollo/client";
 const Header = ({setOpen}:any) => {
     const carts1 = useReactiveVar(cartItems);
     const [navigation, setNavigation] = useState([
-        { name: 'Донат', to: '/', current: true },
-        { name: 'Банлист', to: 'https://ban.hyneo.ru/', current: false },
-        { name: 'Wiki', to: 'https://wiki.hyneo.ru/', current: false },
-        { name: 'Правила', to: 'https://wiki.hyneo.ru/p/1', current: false },
+        { name: 'Донат', to: '/' },
+        { name: 'Банлист', to: 'https://ban.hyneo.ru/'},
+        { name: 'Wiki', to: 'https://wiki.hyneo.ru/'},
+        { name: 'Правила', to: 'https://wiki.hyneo.ru/p/1'},
     ]);
     return (
         <Disclosure as="nav" className="bg-gray-800">
@@ -35,33 +35,20 @@ const Header = ({setOpen}:any) => {
                                 </Disclosure.Button>
                             </div>
                             <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-                                <div className="flex-shrink-0 flex items-center text-green-600 text-2xl">
-                                    HyNeo
-                                </div>
+                                <Link to="/">
+                                    <div className="flex-shrink-0 flex items-center text-green-600 text-2xl cursor-pointer">
+                                        HyNeo
+                                    </div>
+                                </Link>
                                 <div className="hidden sm:block sm:ml-6">
                                     <div className="flex space-x-4">
                                         {navigation.map((item, value) => (
                                             <a
                                                 key={value}
                                                 href={item.to}
-                                                className={classNames(
-                                                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                                className={classNames('text-gray-300 hover:bg-gray-700 hover:text-white',
                                                     'px-3 py-2 rounded-md text-sm font-medium'
                                                 )}
-                                                onClick={()=> {
-                                                    setNavigation(navigation.map(value1 => {
-                                                        if(value1.current){
-                                                            value1.current = false;
-                                                        }
-                                                        return value1;
-                                                    }).map(value1 => {
-                                                        if(value1.name === item.name){
-                                                            value1.current = true;
-                                                        }
-                                                        return value1;
-                                                    }));
-                                                }}
-                                                aria-current={item.current ? 'page' : undefined}
                                             >
                                                 {item.name}
                                             </a>
@@ -95,24 +82,10 @@ const Header = ({setOpen}:any) => {
                                 <a
                                       key={value}
                                       href={item.to}
-                                      onClick={()=> {
-                                          setNavigation(navigation.map(value1 => {
-                                              if(value1.current){
-                                                  value1.current = false;
-                                              }
-                                              return value1;
-                                          }).map(value1 => {
-                                              if(value1.name === item.name){
-                                                  value1.current = true;
-                                              }
-                                              return value1;
-                                          }));
-                                      }}
                                       className={classNames(
-                                          item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                          'text-gray-300 hover:bg-gray-700 hover:text-white',
                                           'block px-3 py-2 rounded-md text-base font-medium'
                                       )}
-                                      aria-current={item.current ? 'page' : undefined}
                                 > {item.name}</a>
                             ))}
                         </div>

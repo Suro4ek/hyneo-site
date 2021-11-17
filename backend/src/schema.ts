@@ -73,10 +73,11 @@ module.exports = gql`
 
     type Mutation{
         newCategories(name: String! current: Boolean!): Category
-        newItem(name: String! price: Int! desc: String! img: String): Item
+        newItem(name: String! price: Int! desc: String! img: String! discprice: Int!): Item
         newPromo(name: String! discount: Int!): PromoCode
         checkPromo(name: String!): PromoCode
         buy(buy: BuyInput!): String!
         addItemToCategory(category_id: ID! item_id: ID!): Category
+        signIn(username: String! password: String!): String!
     }
 `;

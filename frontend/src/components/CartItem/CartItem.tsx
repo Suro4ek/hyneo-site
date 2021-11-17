@@ -20,11 +20,14 @@ const CartItem = ({product}:{product: Cart}) => {
                         <h3>
                             <a>{product.item.name}</a>
                         </h3>
-                        <p className="ml-4">{product.item.price}</p>
+                        <div>
+                            <span className="line-through mr-2">{product.item.discprice}р</span>
+                            <span className="text-gray-200">{product.item.price}р</span>
+                        </div>
                     </div>
                 </div>
                 <div className="flex-1 flex items-end justify-between text-sm">
-                    <p className="text-gray-500 dark:text-gray-600">Количество 0</p>
+                    <p className="text-gray-500 dark:text-gray-600"/>
 
                     <div className="flex">
                         <button type="button" className="font-medium text-indigo-600 hover:text-indigo-500" onClick={() => {
@@ -32,7 +35,7 @@ const CartItem = ({product}:{product: Cart}) => {
                             cartItems({
                                 total_price: carts.total_price - product.item.price,
                                 Cart: carts.Cart.filter(value1 => value1.id !== product.id)});
-                            localStorage.setItem("cart", JSON.stringify(cartItems()));
+                                localStorage.setItem("cart", JSON.stringify(cartItems()));
                                 }}>
                             Удалить
                         </button>
