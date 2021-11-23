@@ -41,23 +41,7 @@ const getUser = (token:any) => {
 
 async function startApolloServer() {
     // Same ApolloServer initialization as before
-    app.use(helmet())
-    app.use(cors());
     app.use(express.static(path.resolve(__dirname,'../../frontend/build')));
-    const server = new ApolloServer({
-        cors:true,
-        typeDefs,
-        resolvers,
-        validationRules: [depthLimit(5), createComplexityLimitRule(1000)],
-        context: async ({req}:any) => {
-            const token = req.headers.authorization;
-            const user = getUser(token);
-            return { user };
-        }
-    });
-
-    // Required logic for integrating with Express
-    await server.start();
     app.use('/any_result', async (req: any, res: any) => {
         const pay_id = req.query.pay_id;
         const repository = getRepository(Item);
@@ -143,6 +127,22 @@ async function startApolloServer() {
             }
         })
     );
+    app.use(helmet());
+    app.use(cors());
+    const server = new ApolloServer({
+        cors:true,
+        typeDefs,
+        resolvers,
+        validationRules: [depthLimit(5), createComplexityLimitRule(1000)],
+        context: async ({req}:any) => {
+            const token = req.headers.authorization;
+            const user = getUser(token);
+            return { user };
+        }
+    });
+
+    // Required logic for integrating with Express
+    await server.start();
 
     server.applyMiddleware({app, path: '/api'});
 

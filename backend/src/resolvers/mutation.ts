@@ -54,6 +54,9 @@ module.exports = {
         if(!promocode){
             return {discount: 0}
         }else{
+            if(promocode.count <=0 && promocode.count != -1){
+                return {discount: 0}
+            }
             return {discount: promocode?.discount}
         }
     },
@@ -89,10 +92,11 @@ module.exports = {
         }
         if(promocode){
             discount = promocode?.discount;
-            sum -= (sum*discount)/100
-            payment.promocode = promocode;
+            sum -= (sum*discount)/100;
             promocode.count -= 1;
-            await repository_promo.update({id: promocode.id}, promocode);
+            if(promocode.count != -1)
+                await repository_promo.update({id: promocode.id}, promocode);
+            payment.promocode = promocode;
         }
         payment.nickname = buy.nickname;
         payment.items=JSON.stringify(newitems);

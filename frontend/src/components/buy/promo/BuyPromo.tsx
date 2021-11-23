@@ -4,6 +4,7 @@ import {buy} from "../../../cache/cache";
 
 const BuyPromo = () => {
     const buy_form = useReactiveVar(buy);
+    //TODO: Provider
     const [promo] = useMutation(CHECK_PROMO, {variables: {name: buy_form.promo}, onCompleted: data => {
             if(data.checkPromo.discount === 0){
                 document.getElementById("buyasdasd")!.classList.remove("border-indigo-500")
@@ -13,6 +14,7 @@ const BuyPromo = () => {
                 document.getElementById("buyasdasd")!.classList.remove("border-red-500")
             }
         }});
+
     return(
         <div className="mt-2 relative rounded-md shadow-sm flex">
             <input type="text" placeholder="Промокод" id={"buyasdasd"}
