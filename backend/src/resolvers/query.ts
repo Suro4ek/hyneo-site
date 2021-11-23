@@ -1,8 +1,6 @@
 import {Category} from "../entity/Category";
 import {Item} from "../entity/Item";
 import {getRepository} from "typeorm";
-import {StatusResponse} from "minecraft-server-util/dist/model/StatusResponse";
-import {Promocode} from "../entity/Promocode";
 const util = require('minecraft-server-util');
 
 module.exports = {
@@ -17,5 +15,6 @@ module.exports = {
     minecraft: async(parent: any, args:any) => {
         const minecraft = await util.status('mc.hyneo.ru');
         return minecraft;
-    }
+    },
+
 }

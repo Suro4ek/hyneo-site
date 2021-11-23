@@ -6,7 +6,6 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn
 } from "typeorm";
-import {Item} from "./Item";
 import {Promocode} from "./Promocode";
 
 export enum Process_Pay{

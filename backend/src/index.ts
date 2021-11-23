@@ -6,12 +6,14 @@ import {Pay, Process_Pay} from "./entity/Pay";
 import {Item} from "./entity/Item";
 import {P2P} from "qiwi-sdk";
 import helmet from "helmet";
+import RCON from "minecraft-server-util/src/structure/RCON";
 const cors = require('cors');
 const depthLimit = require('graphql-depth-limit');
 const { createComplexityLimitRule } = require('graphql-validation-complexity');
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const {ApolloServer} = require('apollo-server-express');
+const util = require('minecraft-server-util');
 require('dotenv').config();
 
 const typeDefs = require('./schema');
@@ -25,7 +27,8 @@ const connection = createConnection();
 
 connection.then(() => {
     console.log("Connected")
-})
+});
+
 
 const getUser = (token:any) => {
     if (token) {
@@ -38,6 +41,7 @@ const getUser = (token:any) => {
         }
     }
 };
+const client:RCON = new util.RCON(process.env.RCON_IP, { port:process.env.RCON_PORT, enableSRV: true, timeout: 5000, password: process.env.RCON_PASSSWORD });
 
 async function startApolloServer() {
     // Same ApolloServer initialization as before
@@ -80,8 +84,16 @@ async function startApolloServer() {
                 res.json({error: "Не вверная подпись"});
                 return;
             }
-            await repository_pay.update({id: pay_id}, {process:Process_Pay.PAID, updated_at: new Date() });
-            res.json({message: 'OK'});
+            client.connect().then(() => {
+                items.forEach((value, index) => {
+                    client.run(value.command.replace("%username%", payment.nickname))
+                });
+                repository_pay.update({id: pay_id}, {process:Process_Pay.PAID, updated_at: new Date() });
+                res.json({message: 'OK'});
+            })
+                .catch(error => {
+                    res.json({error: 'Не смог выдать донат, возможно не полатки на стороне сервера.'});
+                });
         }else{
             res.json({error: "Не найден счет"});
         }
@@ -123,7 +135,16 @@ async function startApolloServer() {
                     console.log("Ошибка")
                     return;
                 }
-                await repository_pay.update({id: parseInt(req.body.billId)}, {process:Process_Pay.PAID, updated_at: new Date() });
+                //TODO RCON
+                client.connect().then(() => {
+                        items.forEach((value, index) => {
+                            client.run(value.command.replace("%username%", payment.nickname))
+                        });
+                        repository_pay.update({id: parseInt(req.body.billId)}, {process:Process_Pay.PAID, updated_at: new Date() });
+                })
+                .catch(error => {
+                    res.json({error: 'Не смог выдать донат, возможно не полатки на стороне сервера.'});
+                });
             }
         })
     );
