@@ -7,7 +7,6 @@ import {Pay, Process_Pay} from "../entity/Pay";
 import {AuthenticationError, ForbiddenError} from "apollo-server-express";
 import {User} from "../entity/User";
 const crypto = require("crypto");
-const path = require('path');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
@@ -68,10 +67,6 @@ module.exports = {
         let discount = 0;
         const buy = args.buy;
         const promocode = await repository_promo.findOne({where: {name: buy.promo}});
-        if(promocode){
-            discount = promocode?.discount;
-            payment.promocode = promocode;
-        }
         const carts = buy.Cart;
         const ids = [];
         let sum = 0;
@@ -91,6 +86,13 @@ module.exports = {
                     newitems.push(value);
                 }
             })
+        }
+        if(promocode){
+            discount = promocode?.discount;
+            sum -= (sum*discount)/100
+            payment.promocode = promocode;
+            promocode.count -= 1;
+            await repository_promo.update({id: promocode.id}, promocode);
         }
         payment.nickname = buy.nickname;
         payment.items=JSON.stringify(newitems);

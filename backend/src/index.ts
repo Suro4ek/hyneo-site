@@ -83,6 +83,11 @@ async function startApolloServer() {
                     }
                 })
             }
+            if(payment.promocode){
+                const promocode = payment.promocode;
+                const discount = promocode?.discount;
+                sum -= (sum*discount)/100
+            }
             const secret_key = process.env.SECRET_KEY;
             const arr = [process.env.PROJECT_ID,sum,pay_id,secret_key];
             const hesh = crypto.createHash("md5");
@@ -125,6 +130,11 @@ async function startApolloServer() {
                     })
                 }
                 desc += "на ник "+payment.nickname;
+                if(payment.promocode){
+                    const promocode = payment.promocode;
+                    const discount = promocode?.discount;
+                    sum -= (sum*discount)/100
+                }
                 if(sum !== req.body.amount.value && desc !== req.body.comment){
                     console.log("Ошибка")
                     return;
