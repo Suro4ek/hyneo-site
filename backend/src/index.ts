@@ -6,7 +6,6 @@ import {Pay, Process_Pay} from "./entity/Pay";
 import {Item} from "./entity/Item";
 import {P2P} from "qiwi-sdk";
 import helmet from "helmet";
-import RCON from "minecraft-server-util/src/structure/RCON";
 const cors = require('cors');
 const depthLimit = require('graphql-depth-limit');
 const { createComplexityLimitRule } = require('graphql-validation-complexity');
@@ -41,7 +40,8 @@ const getUser = (token:any) => {
         }
     }
 };
-const client:RCON = new util.RCON(process.env.RCON_IP, { port:process.env.RCON_PORT, enableSRV: true, timeout: 5000, password: process.env.RCON_PASSSWORD });
+
+const client = new util.RCON(process.env.RCON_IP, { port:25575, enableSRV: true, timeout: 5000, password: "asdsadsad" });
 
 async function startApolloServer() {
     // Same ApolloServer initialization as before
@@ -91,7 +91,7 @@ async function startApolloServer() {
                 repository_pay.update({id: pay_id}, {process:Process_Pay.PAID, updated_at: new Date() });
                 res.json({message: 'OK'});
             })
-                .catch(error => {
+                .catch((error:any) => {
                     res.json({error: 'Не смог выдать донат, возможно не полатки на стороне сервера.'});
                 });
         }else{
@@ -142,16 +142,16 @@ async function startApolloServer() {
                         });
                         repository_pay.update({id: parseInt(req.body.billId)}, {process:Process_Pay.PAID, updated_at: new Date() });
                 })
-                .catch(error => {
+                .catch((error:any) => {
                     res.json({error: 'Не смог выдать донат, возможно не полатки на стороне сервера.'});
                 });
             }
         })
     );
-    app.use(helmet());
     app.use(cors());
+    app.use(helmet());
     const server = new ApolloServer({
-        cors:true,
+        cors:false,
         typeDefs,
         resolvers,
         validationRules: [depthLimit(5), createComplexityLimitRule(1000)],
